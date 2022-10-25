@@ -27,6 +27,14 @@ public class Video {
         this.url = url;
     }
 
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     public Long getId() {
         return id;
     }
