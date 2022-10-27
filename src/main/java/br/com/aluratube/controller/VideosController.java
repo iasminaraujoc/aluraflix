@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,7 @@ public class VideosController {
     }
 
     @PostMapping
-    public ResponseEntity<VideoDTO> cadastrar(@RequestBody VideoForm form, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<VideoDTO> cadastrar(@RequestBody @Valid VideoForm form, UriComponentsBuilder uriBuilder){
         Video video = form.converter();
         videoRepository.save(video);
 
@@ -46,7 +47,7 @@ public class VideosController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VideoDTO> atualizar(@PathVariable Long id, @RequestBody VideoForm form){
+    public ResponseEntity<VideoDTO> atualizar(@PathVariable Long id, @RequestBody @Valid VideoForm form){
         Optional<Video> optional =  videoRepository.findById(id);
 
         if (optional.isPresent()){
