@@ -10,3 +10,7 @@ INSERT INTO VIDEO(titulo, descricao, url) VALUES('Um novo guia de Carreira em Te
 INSERT INTO VIDEO(titulo, descricao, url) VALUES('Como fazer um bom portfólio em tecnologia com Diogo Pires | #HipstersPontoTube',
                                                  'Como fazer um Portfólio para seus projetos no GitHub e usar no LinkedIn, os principais passos para sua carreira na programação.',
                                                'https://www.youtube.com/watch?v=gu1OXrirC0U');
+
+INSERT INTO CATEGORIA(titulo, cor) VALUES ('Programação', 'Verde-escuro');
+INSERT INTO CATEGORIA(titulo, cor) VALUES ('Front-end', 'Azul');
+INSERT INTO CATEGORIA(titulo, cor) VALUES ('Data-science', 'Verde-claro');
