@@ -22,9 +22,14 @@ public class VideosController {
     private VideoRepository videoRepository;
 
     @GetMapping
-    public List<VideoDTO> lista(){
-        List<Video> videos = videoRepository.findAll();
-        return VideoDTO.converter(videos);
+    public List<VideoDTO> pesquisaPorTitulo(@RequestParam(required = false) String titulo){
+        if(titulo == null) {
+            List<Video> videos = videoRepository.findAll();
+            return VideoDTO.converter(videos);
+        } else {
+            List<Video> videos = videoRepository.findByTitulo(titulo);
+            return VideoDTO.converter(videos);
+        }
     }
 
     @GetMapping("/{id}")
