@@ -13,6 +13,16 @@ public class VideoForm {
     private String descricao;
     private String url;
 
+    //private Long idCategoria;
+
+    //public void setIdCategoria(Long idCategoria) {
+//        this.idCategoria = idCategoria;
+//    }
+
+    //public Long getIdCategoria() {
+//        return idCategoria;
+//    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -45,6 +55,7 @@ public class VideoForm {
         Video video = videoRepository.getReferenceById(id);
         video.setTitulo(this.titulo);
         video.setDescricao(this.descricao);
+        //video.setIdCategoria(this.idCategoria);
 
         return video;
     }

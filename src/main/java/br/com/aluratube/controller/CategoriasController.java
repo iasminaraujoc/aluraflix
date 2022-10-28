@@ -1,6 +1,7 @@
 package br.com.aluratube.controller;
 
 import br.com.aluratube.controller.dto.CategoriaDTO;
+import br.com.aluratube.controller.dto.VideoDTO;
 import br.com.aluratube.controller.form.CategoriaForm;
 import br.com.aluratube.modelo.Categoria;
 import br.com.aluratube.repository.CategoriaRepository;
@@ -31,6 +32,16 @@ public class CategoriasController {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
         if(categoria.isPresent()){
             return ResponseEntity.ok(new CategoriaDTO(categoria.get()));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/videos")
+    public ResponseEntity<List<VideoDTO>> videoPorCategoria(@PathVariable Long id){
+        Optional<Categoria> optional = categoriaRepository.findById(id);
+        if(optional.isPresent()){
+            Categoria categoria = categoriaRepository.getReferenceById(id);
+            return ResponseEntity.ok(VideoDTO.converter(categoria.getVideos()));
         }
         return ResponseEntity.notFound().build();
     }

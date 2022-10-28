@@ -1,9 +1,8 @@
 package br.com.aluratube.modelo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Categoria {
@@ -12,6 +11,9 @@ public class Categoria {
     private Long id;
     private String titulo;
     private String cor;
+
+    @OneToMany(mappedBy = "categoria")
+    private List<Video> videos = new ArrayList<>();
 
     public Categoria(){}
 
@@ -22,6 +24,10 @@ public class Categoria {
 
     public Long getId() {
         return id;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
     }
 
     public String getTitulo() {

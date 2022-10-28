@@ -14,8 +14,11 @@ public class VideoDTO {
 
     private String url;
 
+    private Long categoriaId;
+
     public VideoDTO(Video video) {
         this.id = video.getId();
+        this.categoriaId = video.getCategoria().getId();
         this.titulo = video.getTitulo();
         this.descricao = video.getDescricao();
         this.url = video.getUrl();
