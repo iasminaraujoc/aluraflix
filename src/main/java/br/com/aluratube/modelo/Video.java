@@ -2,6 +2,7 @@ package br.com.aluratube.modelo;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
 
 @Entity
 public class Video {
@@ -10,13 +11,10 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
     private String titulo;
 
-    @NotEmpty
     private String descricao;
 
-    @NotEmpty
     private String url;
 
     @ManyToOne
@@ -26,8 +24,9 @@ public class Video {
     public Video(){
     }
 
-    public Video(String titulo, String descricao, String url) {
+    public Video(String titulo, String descricao, String url, Categoria categoria) {
         this.titulo = titulo;
+        this.categoria = categoria;
         this.descricao = descricao;
         this.url = url;
     }

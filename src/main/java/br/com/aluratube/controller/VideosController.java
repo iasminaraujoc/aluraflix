@@ -3,12 +3,14 @@ package br.com.aluratube.controller;
 import br.com.aluratube.controller.dto.VideoDTO;
 import br.com.aluratube.controller.form.VideoForm;
 import br.com.aluratube.modelo.Video;
+import br.com.aluratube.repository.CategoriaRepository;
 import br.com.aluratube.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -21,6 +23,9 @@ public class VideosController {
     @Autowired
     private VideoRepository videoRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
     @GetMapping
     public List<VideoDTO> pesquisaPorTitulo(@RequestParam(required = false) String titulo){
         if(titulo == null) {
@@ -31,7 +36,6 @@ public class VideosController {
             return VideoDTO.converter(videos);
         }
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<VideoDTO> videoEncontrado(@PathVariable Long id){
         Optional<Video> video = videoRepository.findById(id);
@@ -43,7 +47,7 @@ public class VideosController {
 
     @PostMapping
     public ResponseEntity<VideoDTO> cadastrar(@RequestBody @Valid VideoForm form, UriComponentsBuilder uriBuilder){
-        Video video = form.converter();
+        Video video = form.converter(categoriaRepository);
         videoRepository.save(video);
 
         URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
@@ -55,7 +59,8 @@ public class VideosController {
         Optional<Video> optional =  videoRepository.findById(id);
 
         if (optional.isPresent()){
-            Video video = form.atualizar(id, videoRepository);
+            Video video = videoRepository.getReferenceById(id);
+            video = form.atualizar(video);
             return ResponseEntity.ok(new VideoDTO(video));
         }
         return ResponseEntity.notFound().build();

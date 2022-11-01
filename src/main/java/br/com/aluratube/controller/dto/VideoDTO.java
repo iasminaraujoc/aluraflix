@@ -1,20 +1,19 @@
 package br.com.aluratube.controller.dto;
 
 import br.com.aluratube.modelo.Video;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class VideoDTO {
     private Long id;
-
-    private String titulo;
-
-    private String descricao;
-
-    private String url;
-
     private Long categoriaId;
+    private String titulo;
+    private String descricao;
+    private String url;
 
     public VideoDTO(Video video) {
         this.id = video.getId();
@@ -30,6 +29,10 @@ public class VideoDTO {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getCategoriaId() {
+        return categoriaId;
     }
 
     public String getTitulo() {

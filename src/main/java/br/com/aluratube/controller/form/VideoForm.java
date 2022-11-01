@@ -1,27 +1,32 @@
 package br.com.aluratube.controller.form;
 
+import br.com.aluratube.modelo.Categoria;
 import br.com.aluratube.modelo.Video;
-import br.com.aluratube.repository.VideoRepository;
+import br.com.aluratube.repository.CategoriaRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import java.util.Optional;
 
 public class VideoForm {
+    private Long categoriaId;
+
+    @NotNull
+    @NotEmpty
     private String titulo;
+    @NotNull
+    @NotEmpty
     private String descricao;
+    @NotNull
+    @NotEmpty
     private String url;
 
-    //private Long idCategoria;
-
-    //public void setIdCategoria(Long idCategoria) {
-//        this.idCategoria = idCategoria;
-//    }
-
-    //public Long getIdCategoria() {
-//        return idCategoria;
-//    }
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
 
     public String getTitulo() {
         return titulo;
@@ -47,15 +52,25 @@ public class VideoForm {
         this.url = url;
     }
 
-    public Video converter() {
-        return new Video(titulo, descricao, url);
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
     }
 
-    public Video atualizar(Long id, VideoRepository videoRepository){
-        Video video = videoRepository.getReferenceById(id);
+    public Video converter(CategoriaRepository categoriaRepository) {
+        Categoria categoria;
+
+        if(categoriaId != null){
+            categoria = categoriaRepository.getReferenceById(categoriaId);
+        } else {
+            Long idCategoriaLivre = Long.valueOf(1);
+            categoria = categoriaRepository.getReferenceById(idCategoriaLivre);
+        }
+        return new Video(titulo, descricao, url, categoria);
+    }
+
+    public Video atualizar(Video video){
         video.setTitulo(this.titulo);
         video.setDescricao(this.descricao);
-        //video.setIdCategoria(this.idCategoria);
 
         return video;
     }
