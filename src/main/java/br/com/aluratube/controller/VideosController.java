@@ -1,6 +1,7 @@
 package br.com.aluratube.controller;
 
 import br.com.aluratube.controller.dto.VideoDTO;
+import br.com.aluratube.controller.exception.ItemNotFoundException;
 import br.com.aluratube.controller.form.VideoForm;
 import br.com.aluratube.modelo.Video;
 import br.com.aluratube.repository.CategoriaRepository;
@@ -42,7 +43,7 @@ public class VideosController {
         if(video.isPresent()){
             return ResponseEntity.ok(new VideoDTO(video.get()));
         }
-        return ResponseEntity.notFound().build();
+        throw new ItemNotFoundException();
     }
 
     @PostMapping
@@ -64,7 +65,7 @@ public class VideosController {
             video = form.atualizar(video);
             return ResponseEntity.ok(new VideoDTO(video));
         }
-        return ResponseEntity.notFound().build();
+        throw new ItemNotFoundException();
     }
 
     @DeleteMapping("/{id}")
@@ -75,7 +76,7 @@ public class VideosController {
             videoRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.notFound().build();
+        throw new ItemNotFoundException();
     }
 
 }

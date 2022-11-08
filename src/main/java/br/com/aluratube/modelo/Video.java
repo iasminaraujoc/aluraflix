@@ -58,12 +58,5 @@ public class Video {
     public String getUrl() {
         return url;
     }
-//
-//    public void setIdCategoria(Long idCategoria) {
-//        this.idCategoria = idCategoria;
-//    }
-//
-//    public Long getIdCategoria() {
-//        return idCategoria;
-//    }
+
 }

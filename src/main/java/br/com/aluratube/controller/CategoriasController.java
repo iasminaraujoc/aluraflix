@@ -2,6 +2,7 @@ package br.com.aluratube.controller;
 
 import br.com.aluratube.controller.dto.CategoriaDTO;
 import br.com.aluratube.controller.dto.VideoDTO;
+import br.com.aluratube.controller.exception.ItemNotFoundException;
 import br.com.aluratube.controller.form.CategoriaForm;
 import br.com.aluratube.modelo.Categoria;
 import br.com.aluratube.repository.CategoriaRepository;
@@ -34,7 +35,7 @@ public class CategoriasController {
         if(categoria.isPresent()){
             return ResponseEntity.ok(new CategoriaDTO(categoria.get()));
         }
-        return ResponseEntity.notFound().build();
+        throw new ItemNotFoundException();
     }
 
     @GetMapping("/{id}/videos")
@@ -44,7 +45,7 @@ public class CategoriasController {
             Categoria categoria = categoriaRepository.getReferenceById(id);
             return ResponseEntity.ok(VideoDTO.converter(categoria.getVideos()));
         }
-        return ResponseEntity.notFound().build();
+        throw new ItemNotFoundException();
     }
 
     @PostMapping
@@ -63,7 +64,7 @@ public class CategoriasController {
             Categoria categoria = form.atualizar(id, categoriaRepository);
             return ResponseEntity.ok(new CategoriaDTO(categoria));
         }
-        return ResponseEntity.notFound().build();
+        throw new ItemNotFoundException();
     }
 
     @DeleteMapping("/{id}")
@@ -73,7 +74,7 @@ public class CategoriasController {
             categoriaRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.notFound().build();
+        throw new ItemNotFoundException();
     }
 
 }

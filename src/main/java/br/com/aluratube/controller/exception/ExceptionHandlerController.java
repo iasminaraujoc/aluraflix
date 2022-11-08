@@ -16,6 +16,13 @@ import java.util.List;
 public class ExceptionHandlerController {
 
     @ResponseBody
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<MessageExceptionHandler> itemNaoEncontrado(ItemNotFoundException itemNotFoundException){
+        MessageExceptionHandler erro = new MessageExceptionHandler(new Date(), HttpStatus.BAD_REQUEST.value(), "Item não encontrado");
+        return new ResponseEntity<>(erro, HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<MessageExceptionHandler> argumentsNotValid(MethodArgumentNotValidException notValid){
         BindingResult bindingResult = notValid.getBindingResult();
