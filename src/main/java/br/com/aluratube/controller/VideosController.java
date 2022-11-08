@@ -50,6 +50,7 @@ public class VideosController {
         Video video = form.converter(categoriaRepository);
         videoRepository.save(video);
 
+
         URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
         return ResponseEntity.created(uri).body(new VideoDTO(video));
     }

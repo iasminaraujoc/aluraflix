@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class CategoriasController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> criarCategoria(@RequestBody CategoriaForm form, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<CategoriaDTO> criarCategoria(@RequestBody @Valid CategoriaForm form, UriComponentsBuilder uriBuilder){
         Categoria novaCategoria = form.converter();
         categoriaRepository.save(novaCategoria);
 

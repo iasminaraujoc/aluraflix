@@ -3,25 +3,17 @@ package br.com.aluratube.controller.form;
 import br.com.aluratube.modelo.Categoria;
 import br.com.aluratube.modelo.Video;
 import br.com.aluratube.repository.CategoriaRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import java.util.Optional;
 
 public class VideoForm {
     private Long categoriaId;
-
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     private String titulo;
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     private String descricao;
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     private String url;
 
     public Long getCategoriaId() {

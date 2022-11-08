@@ -4,13 +4,14 @@ package br.com.aluratube.controller.form;
 import br.com.aluratube.modelo.Categoria;
 import br.com.aluratube.repository.CategoriaRepository;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class CategoriaForm {
-
-
     private Long id;
-
+    @NotNull
     private String titulo;
-
+    @NotNull
     private String cor;
 
     public Long getId() {

@@ -1,3 +1,4 @@
+INSERT INTO CATEGORIA(titulo, cor) VALUES ('Livre', 'Rosa');
 INSERT INTO CATEGORIA(titulo, cor) VALUES ('Programação', 'Verde-escuro');
 INSERT INTO CATEGORIA(titulo, cor) VALUES ('Front-end', 'Azul');
 INSERT INTO CATEGORIA(titulo, cor) VALUES ('Data-science', 'Verde-claro');
