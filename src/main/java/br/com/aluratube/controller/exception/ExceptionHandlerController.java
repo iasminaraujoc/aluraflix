@@ -1,5 +1,6 @@
 package br.com.aluratube.controller.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -39,5 +40,13 @@ public class ExceptionHandlerController {
 
         MessageExceptionHandler erro = new MessageExceptionHandler(new Date(), HttpStatus.BAD_REQUEST.value(), stringBuilder.toString());
         return new ResponseEntity<>(erro, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<MessageExceptionHandler> impossivelDeletar(DataIntegrityViolationException dataIntegrityViolationException){
+        MessageExceptionHandler erro = new MessageExceptionHandler(new Date(), HttpStatus.BAD_REQUEST.value(),
+                "Impossível deletar! A categoria está associada a algum vídeo.");
+        return new ResponseEntity<>(erro, HttpStatus.METHOD_NOT_ALLOWED);
     }
 }

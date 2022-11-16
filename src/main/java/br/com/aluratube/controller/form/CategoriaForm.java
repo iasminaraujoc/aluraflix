@@ -37,4 +37,12 @@ public class CategoriaForm {
 
         return categoria;
     }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
 }

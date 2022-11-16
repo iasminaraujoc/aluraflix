@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,13 +30,16 @@ public class VideosController {
 
     @GetMapping
     public List<VideoDTO> pesquisaPorTitulo(@RequestParam(required = false) String titulo){
-        if(titulo == null) {
+        if(titulo==null){
             List<Video> videos = videoRepository.findAll();
             return VideoDTO.converter(videos);
-        } else {
-            List<Video> videos = videoRepository.findByTitulo(titulo);
-            return VideoDTO.converter(videos);
         }
+        Optional<Video> optional =  videoRepository.findByTitulo(titulo);
+        if (optional.isPresent()){
+            Video video = videoRepository.getReferenceByTitulo(titulo);
+            return VideoDTO.converter(Arrays.asList(video));
+        }
+        throw new ItemNotFoundException();
     }
     @GetMapping("/{id}")
     public ResponseEntity<VideoDTO> videoEncontrado(@PathVariable Long id){
@@ -50,7 +54,6 @@ public class VideosController {
     public ResponseEntity<VideoDTO> cadastrar(@RequestBody @Valid VideoForm form, UriComponentsBuilder uriBuilder){
         Video video = form.converter(categoriaRepository);
         videoRepository.save(video);
-
 
         URI uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
         return ResponseEntity.created(uri).body(new VideoDTO(video));
