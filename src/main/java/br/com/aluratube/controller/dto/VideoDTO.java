@@ -2,6 +2,7 @@ package br.com.aluratube.controller.dto;
 
 import br.com.aluratube.modelo.Video;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -23,8 +24,8 @@ public class VideoDTO {
         this.url = video.getUrl();
     }
 
-    public static List<VideoDTO> converter(List<Video> videos) {
-        return videos.stream().map(VideoDTO::new).collect(Collectors.toList());
+    public static Page<VideoDTO> converter(Page<Video> videos) {
+        return videos.map(VideoDTO::new);
     }
 
     public Long getId() {

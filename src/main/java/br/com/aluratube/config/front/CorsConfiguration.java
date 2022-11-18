@@ -1,4 +1,4 @@
-package br.com.aluratube.configfront;
+package br.com.aluratube.config.front;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

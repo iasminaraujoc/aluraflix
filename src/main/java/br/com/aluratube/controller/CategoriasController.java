@@ -5,8 +5,14 @@ import br.com.aluratube.controller.dto.VideoDTO;
 import br.com.aluratube.controller.exception.ItemNotFoundException;
 import br.com.aluratube.controller.form.CategoriaForm;
 import br.com.aluratube.modelo.Categoria;
+import br.com.aluratube.modelo.Video;
 import br.com.aluratube.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,8 +30,8 @@ public class CategoriasController {
     private CategoriaRepository categoriaRepository;
 
     @GetMapping
-    public List<CategoriaDTO> listaCategorias(){
-        List<Categoria> categorias = categoriaRepository.findAll();
+    public Page<CategoriaDTO> listaCategorias(@PageableDefault(page=0, size=5) Pageable paginacao){
+        Page<Categoria> categorias = categoriaRepository.findAll(paginacao);
         return CategoriaDTO.converter(categorias);
     }
 
@@ -39,11 +45,13 @@ public class CategoriasController {
     }
 
     @GetMapping("/{id}/videos")
-    public ResponseEntity<List<VideoDTO>> videoPorCategoria(@PathVariable Long id){
+    public ResponseEntity<Page<VideoDTO>> videoPorCategoria(@PathVariable Long id, @PageableDefault(page=0, size=5) Pageable paginacao){
         Optional<Categoria> optional = categoriaRepository.findById(id);
         if(optional.isPresent()){
             Categoria categoria = categoriaRepository.getReferenceById(id);
-            return ResponseEntity.ok(VideoDTO.converter(categoria.getVideos()));
+            List<Video> videosLista = categoria.getVideos();
+            Page<Video> videosPagina = new PageImpl<>(videosLista);
+            return ResponseEntity.ok(VideoDTO.converter(videosPagina));
         }
         throw new ItemNotFoundException();
     }

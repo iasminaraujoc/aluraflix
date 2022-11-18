@@ -1,6 +1,7 @@
 package br.com.aluratube.controller.dto;
 
 import br.com.aluratube.modelo.Categoria;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,8 +17,8 @@ public class CategoriaDTO {
         this.cor = categoria.getCor();
     }
 
-    public static List<CategoriaDTO> converter(List<Categoria> categorias) {
-        return categorias.stream().map(CategoriaDTO::new).collect(Collectors.toList());
+    public static Page<CategoriaDTO> converter(Page<Categoria> categorias) {
+        return categorias.map(CategoriaDTO::new);
     }
 
     public Long getId() {

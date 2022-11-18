@@ -7,15 +7,15 @@ import br.com.aluratube.modelo.Video;
 import br.com.aluratube.repository.CategoriaRepository;
 import br.com.aluratube.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,15 +29,16 @@ public class VideosController {
     private CategoriaRepository categoriaRepository;
 
     @GetMapping
-    public List<VideoDTO> pesquisaPorTitulo(@RequestParam(required = false) String titulo){
+    public Page<VideoDTO> pesquisaPorTitulo(@RequestParam(required = false) String titulo,
+                                            @PageableDefault(page=0, size=5) Pageable paginacao){
         if(titulo==null){
-            List<Video> videos = videoRepository.findAll();
+            Page<Video> videos = videoRepository.findAll(paginacao);
             return VideoDTO.converter(videos);
         }
         Optional<Video> optional =  videoRepository.findByTitulo(titulo);
         if (optional.isPresent()){
-            Video video = videoRepository.getReferenceByTitulo(titulo);
-            return VideoDTO.converter(Arrays.asList(video));
+            Page<Video> video = videoRepository.findByTitulo(titulo, paginacao);
+            return VideoDTO.converter(video);
         }
         throw new ItemNotFoundException();
     }
