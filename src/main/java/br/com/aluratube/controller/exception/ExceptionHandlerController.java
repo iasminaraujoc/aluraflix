@@ -1,5 +1,6 @@
 package br.com.aluratube.controller.exception;
 
+import br.com.aluratube.config.security.TokenInvalidoException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.naming.AuthenticationException;
 import java.util.Date;
 import java.util.List;
 
@@ -45,8 +47,16 @@ public class ExceptionHandlerController {
     @ResponseBody
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<MessageExceptionHandler> impossivelDeletar(DataIntegrityViolationException dataIntegrityViolationException){
-        MessageExceptionHandler erro = new MessageExceptionHandler(new Date(), HttpStatus.BAD_REQUEST.value(),
+        MessageExceptionHandler erro = new MessageExceptionHandler(new Date(), HttpStatus.METHOD_NOT_ALLOWED.value(),
                 "Impossível deletar! A categoria está associada a algum vídeo.");
         return new ResponseEntity<>(erro, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(TokenInvalidoException.class)
+    public ResponseEntity<MessageExceptionHandler> tokenInvalido(TokenInvalidoException tokenInvalidoException){
+        MessageExceptionHandler erro = new MessageExceptionHandler(new Date(), HttpStatus.FORBIDDEN.value(),
+                "Credenciais inválidas!");
+        return new ResponseEntity<>(erro, HttpStatus.FORBIDDEN);
     }
 }

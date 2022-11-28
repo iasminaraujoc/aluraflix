@@ -8,6 +8,7 @@ import br.com.aluratube.repository.CategoriaRepository;
 import br.com.aluratube.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,6 +44,22 @@ public class VideosController {
             return VideoDTO.converter(video);
         }
         throw new ItemNotFoundException();
+    }
+
+    @GetMapping("/free")
+    public Page<VideoDTO> retornaVideosFree(@PageableDefault(page=0, size=5) Pageable paginacao){
+        List<Video> videos = new ArrayList<>();
+        Optional<Video> aux = videoRepository.findById((long) 1);
+        for(long i = 2; i<6; i++){
+            if(aux.isPresent()){
+                Video video = videoRepository.getReferenceById(i-1);
+                videos.add(video);
+            }
+            else break;
+            aux = videoRepository.findById(i);
+        }
+        Page<Video> pageVideos = new PageImpl<Video>(videos, paginacao, videos.size());
+        return VideoDTO.converter(pageVideos);
     }
     @GetMapping("/{id}")
     public ResponseEntity<VideoDTO> videoEncontrado(@PathVariable Long id){

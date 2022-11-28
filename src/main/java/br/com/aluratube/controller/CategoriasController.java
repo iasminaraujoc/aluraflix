@@ -1,9 +1,12 @@
 package br.com.aluratube.controller;
 
+import br.com.aluratube.config.security.TokenService;
 import br.com.aluratube.controller.dto.CategoriaDTO;
+import br.com.aluratube.controller.dto.TokenDto;
 import br.com.aluratube.controller.dto.VideoDTO;
 import br.com.aluratube.controller.exception.ItemNotFoundException;
 import br.com.aluratube.controller.form.CategoriaForm;
+import br.com.aluratube.controller.form.LoginForm;
 import br.com.aluratube.modelo.Categoria;
 import br.com.aluratube.modelo.Video;
 import br.com.aluratube.repository.CategoriaRepository;
@@ -11,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,24 +36,24 @@ public class CategoriasController {
     private CategoriaRepository categoriaRepository;
 
     @GetMapping
-    public Page<CategoriaDTO> listaCategorias(@PageableDefault(page=0, size=5) Pageable paginacao){
+    public Page<CategoriaDTO> listaCategorias(@PageableDefault(page = 0, size = 5) Pageable paginacao) {
         Page<Categoria> categorias = categoriaRepository.findAll(paginacao);
         return CategoriaDTO.converter(categorias);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> encontrarCategoria(@PathVariable Long id){
+    public ResponseEntity<CategoriaDTO> encontrarCategoria(@PathVariable Long id) {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
-        if(categoria.isPresent()){
+        if (categoria.isPresent()) {
             return ResponseEntity.ok(new CategoriaDTO(categoria.get()));
         }
         throw new ItemNotFoundException();
     }
 
     @GetMapping("/{id}/videos")
-    public ResponseEntity<Page<VideoDTO>> videoPorCategoria(@PathVariable Long id, @PageableDefault(page=0, size=5) Pageable paginacao){
+    public ResponseEntity<Page<VideoDTO>> videoPorCategoria(@PathVariable Long id, @PageableDefault(page = 0, size = 5) Pageable paginacao) {
         Optional<Categoria> optional = categoriaRepository.findById(id);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             Categoria categoria = categoriaRepository.getReferenceById(id);
             List<Video> videosLista = categoria.getVideos();
             Page<Video> videosPagina = new PageImpl<>(videosLista);
@@ -57,7 +63,7 @@ public class CategoriasController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> criarCategoria(@RequestBody @Valid CategoriaForm form, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<CategoriaDTO> criarCategoria(@RequestBody @Valid CategoriaForm form, UriComponentsBuilder uriBuilder) {
         Categoria novaCategoria = form.converter();
         categoriaRepository.save(novaCategoria);
 
@@ -66,9 +72,9 @@ public class CategoriasController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> atualizarCategoria(@PathVariable Long id, @RequestBody CategoriaForm form){
+    public ResponseEntity<CategoriaDTO> atualizarCategoria(@PathVariable Long id, @RequestBody CategoriaForm form) {
         Optional<Categoria> categoriaOpt = categoriaRepository.findById(id);
-        if(categoriaOpt.isPresent()){
+        if (categoriaOpt.isPresent()) {
             Categoria categoria = form.atualizar(id, categoriaRepository);
             return ResponseEntity.ok(new CategoriaDTO(categoria));
         }
@@ -76,13 +82,12 @@ public class CategoriasController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> deletarCategoria(@PathVariable Long id){
+    public ResponseEntity<CategoriaDTO> deletarCategoria(@PathVariable Long id) {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
-        if(categoria.isPresent()){
+        if (categoria.isPresent()) {
             categoriaRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
         throw new ItemNotFoundException();
     }
-
 }
